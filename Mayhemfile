@@ -1,0 +1,5 @@
+project: rnshah9/canu
+target: canu
+
+cmds:
+  - cmd: /repo/build/bin/dumpBlob -b @@
