@@ -2,4 +2,4 @@ project: canu
 target: dumpBlob
 
 cmds:
-  - cmd: /repo/build/bin/dumpBlob -b @@
+  - cmd: /dumpBlob -b @@
