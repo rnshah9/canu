@@ -607,13 +607,14 @@ unitigConsensus::generateTemplateStitch(void) {
       bool isAlreadyBad = badToAdd.count(nr) != 0;
       badToAdd.insert(nr);
       if ((rid != firstCandidate && !isAlreadyBad) || allowContains == false) {
-         allowContains = true;
+         allowContains = (allowContains || rid == firstCandidate || isAlreadyBad);  // we hit the end so now we can try to allow contains
          olapLen = origLen;
          if (showAlgorithm()) {
             fprintf(stderr, "generateTemplateStitch()--\n");
-            fprintf(stderr, "generateTemplateStitch()-- FAILED to align read #%d ident %d to last added %d ident %d, will go back and re-try an earlier read until we hit %d\n", rid, _utgpos[nr].ident(), lastStart, _utgpos[lastStart].ident(), firstCandidate);
+            fprintf(stderr, "generateTemplateStitch()-- FAILED to align read #%d ident %d to last added %d ident %d, will go back and re-try an earlier read until we hit %d and allowing contains is %d\n", rid, _utgpos[nr].ident(), lastStart, _utgpos[lastStart].ident(), firstCandidate, allowContains);
             fprintf(stderr, "generateTemplateStitch()--\n");
          }
+         edlibFreeAlignResult(result);
          goto retryCandidate;
       }
       else if (tiglen > minOlap && origLen > minOlap + TRIM_BP ) {
@@ -637,6 +638,7 @@ unitigConsensus::generateTemplateStitch(void) {
             fprintf(stderr, "generateTemplateStitch()-- Trimmed template to %d bp\n", tiglen);
             fprintf(stderr, "generateTemplateStitch()--\n");
          }
+         edlibFreeAlignResult(result);
          goto retryCandidate;
       }
 
